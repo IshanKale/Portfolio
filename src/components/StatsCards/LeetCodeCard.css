@@ -1,0 +1,201 @@
+.stats-card {
+  /* Inherited from GithubCard globally or redefine if needed, but since .stats-card is loaded in both, 
+     I'll redefine here to ensure it's identical if they load separately */
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 480px;
+  color: #fff;
+  font-family: var(--ff-body);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.card-header-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+.card-header-link:hover {
+  opacity: 0.8;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.card-header h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.card-icon {
+  font-size: 1.6rem;
+}
+
+.leetcode-top-grid {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.solved-ring-container {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+}
+
+.solved-ring {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 6;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: #00d8ff; /* Neon cyan */
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-in-out;
+  filter: drop-shadow(0 0 6px rgba(0, 216, 255, 0.4));
+}
+
+.ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ring-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.ring-total {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+.lc-stats-grid {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.lc-stat-box {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  transition: transform 0.2s;
+}
+
+.lc-stat-box:hover {
+  transform: translateY(-2px);
+  background: #222222;
+}
+
+.lc-stat-box.full-width {
+  grid-column: span 2;
+}
+
+.lc-stat-val {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.lc-stat-name {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+.text-gold { color: #ffc01e; text-shadow: 0 0 10px rgba(255, 192, 30, 0.4); }
+.text-purple { color: #d17bff; text-shadow: 0 0 10px rgba(209, 123, 255, 0.4); }
+.text-easy { color: #00b8a3; }
+.text-medium { color: #ffc01e; }
+.text-hard { color: #ff375f; }
+
+.bg-easy { background-color: #00b8a3; box-shadow: 0 0 8px rgba(0, 184, 163, 0.5); }
+.bg-medium { background-color: #ffc01e; box-shadow: 0 0 8px rgba(255, 192, 30, 0.5); }
+.bg-hard { background-color: #ff375f; box-shadow: 0 0 8px rgba(255, 55, 95, 0.5); }
+
+.lc-difficulty-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.difficulty-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.diff-stats {
+  display: flex;
+  gap: 14px;
+  font-size: 0.8rem;
+}
+
+.diff-counts {
+  color: #aaa;
+}
+
+.diff-beats {
+  font-weight: 700;
+}
+
+.diff-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.diff-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease-in-out;
+}
