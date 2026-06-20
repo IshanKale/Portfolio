@@ -10,6 +10,7 @@ import OrbitingAvatar from "../components/OrbitingAvatar/OrbitingAvatar";
 import GithubCard from "../components/StatsCards/GithubCard";
 import LeetCodeCard from "../components/StatsCards/LeetCodeCard";
 import { certificatesData } from "../data/certificates";
+import resumeFile from "../assets/resume.pdf";
 const designationTexts = [
   "Full-Stack Developer",
   "AI & Data Science Student",
@@ -412,6 +413,21 @@ const Home = () => {
               <p>
                 Full-Stack Developer skilled in MERN Stack and Python, passionate about building scalable web applications and AI-powered solutions. Currently exploring Machine Learning, Deep Learning, and contributing to open-source projects through SSoC'26.
               </p>
+              <div style={{ marginTop: "28px" }}>
+                <a 
+                  href={resumeFile} 
+                  download="Ishan_Kale_Resume.pdf" 
+                  className="btn btn-primary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: "10px" }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Download Resume
+                </a>
+              </div>
             </div>
           </div>
           
@@ -540,13 +556,7 @@ const Home = () => {
             </p>
           </div>
           <div className="projects-grid reveal">
-            <a
-              href="https://github.com/IshanKale/e-commerce"
-              target="_blank"
-              rel="noreferrer"
-              className="project-card"
-              style={{ textDecoration: "none" }}
-            >
+            <article className="project-card">
               <span className="project-badge">Web</span>
               <span className="project-type">Full stack</span>
               <h3>E-Commerce Platform</h3>
@@ -557,14 +567,26 @@ const Home = () => {
               <div className="project-footer">
                 <span>React · Node.js · Express · MongoDB</span>
               </div>
-            </a>
-            <a
-              href="https://github.com/IshanKale/resume-analyser"
-              target="_blank"
-              rel="noreferrer"
-              className="project-card"
-              style={{ textDecoration: "none" }}
-            >
+              <div className="project-links">
+                <a
+                  href="https://github.com/IshanKale/e-commerce"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="project-link"
+                >
+                  GitHub ↗
+                </a>
+                <a
+                  href="https://e-commerce-smoky-sigma.vercel.app/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="project-link"
+                >
+                  Live Demo ↗
+                </a>
+              </div>
+            </article>
+            <article className="project-card">
               <span className="project-badge">AI</span>
               <span className="project-type">Full stack</span>
               <h3>Resume Analyser</h3>
@@ -575,7 +597,25 @@ const Home = () => {
               <div className="project-footer">
                 <span>React · Node.js · Groq AI</span>
               </div>
-            </a>
+              <div className="project-links">
+                <a
+                  href="https://github.com/IshanKale/resume-analyser"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="project-link"
+                >
+                  GitHub ↗
+                </a>
+                <a
+                  href="https://github.com/IshanKale/resume-analyser"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="project-link"
+                >
+                  Live Demo ↗
+                </a>
+              </div>
+            </article>
             <a
               href="https://github.com/IshanKale"
               target="_blank"

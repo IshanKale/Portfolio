@@ -24,17 +24,18 @@ const Navbar = () => {
 
       setScrolled(currentScrollY > 50);
       
-      if (!menuOpen) {
-        if (currentScrollY < 50) {
-          setVisible(true);
-        } else if (currentScrollY < lastScrollY) {
-          setVisible(true);
-        } else {
-          setVisible(false);
+      setLastScrollY((prev) => {
+        if (!menuOpen) {
+          if (currentScrollY < 50) {
+            setVisible(true);
+          } else if (currentScrollY < prev) {
+            setVisible(true);
+          } else {
+            setVisible(false);
+          }
         }
-      }
-
-      setLastScrollY(currentScrollY);
+        return currentScrollY;
+      });
 
       const documentHeight = document.body.scrollHeight - window.innerHeight;
       setProgress(
@@ -47,7 +48,7 @@ const Navbar = () => {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [menuOpen, lastScrollY]);
+  }, [menuOpen]);
 
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -81,13 +82,14 @@ const Navbar = () => {
   };
 
   return (
-    <nav
-      className={`navbar${scrolled ? " scrolled" : ""}${visible || menuOpen ? "" : " hidden"}`}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => {
-        if (!menuOpen) setVisible(false);
-      }}
-    >
+    <>
+      <nav
+        className={`navbar${scrolled ? " scrolled" : ""}${visible || menuOpen ? "" : " hidden"}${menuOpen ? " menu-open" : ""}`}
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => {
+          if (!menuOpen) setVisible(false);
+        }}
+      >
       <div className="nav-progress" style={{ width: `${progress}%` }} />
       <div className="nav-inner">
         <a 
@@ -121,23 +123,24 @@ const Navbar = () => {
           <span />
         </button>
       </div>
-      <div className={`mobile-menu${menuOpen ? " open" : ""}`}>
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href={item.to}
-            className="nav-link"
-            onClick={(e) => handleNavClick(e, item.to)}
-          >
-            {item.label}
-          </a>
-        ))}
-      </div>
-      <div
-        className={`mobile-menu-overlay${menuOpen ? " visible" : ""}`}
-        onClick={closeMobileMenu}
-      />
     </nav>
+    <div className={`mobile-menu${menuOpen ? " open" : ""}`}>
+      {navItems.map((item) => (
+        <a
+          key={item.label}
+          href={item.to}
+          className="nav-link"
+          onClick={(e) => handleNavClick(e, item.to)}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+    <div
+      className={`mobile-menu-overlay${menuOpen ? " visible" : ""}`}
+      onClick={closeMobileMenu}
+    />
+    </>
   );
 };
 

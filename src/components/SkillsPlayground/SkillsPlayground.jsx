@@ -93,7 +93,14 @@ const SkillsPlayground = () => {
 
     // Custom animation loop is more reliable in React than Matter.Runner
     let animationFrameId;
+    let isVisible = true;
+
     const update = () => {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(update);
+        return;
+      }
+      
       Matter.Engine.update(engine, 1000 / 60);
 
       bodies.forEach((body) => {
@@ -112,6 +119,16 @@ const SkillsPlayground = () => {
     };
     update();
 
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    if (sceneRef.current) {
+      visibilityObserver.observe(sceneRef.current);
+    }
+
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const newWidth = entry.contentRect.width;
@@ -129,6 +146,7 @@ const SkillsPlayground = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
+      visibilityObserver.disconnect();
       if (engineRef.current) {
         Matter.World.clear(engineRef.current.world);
         Matter.Engine.clear(engineRef.current);

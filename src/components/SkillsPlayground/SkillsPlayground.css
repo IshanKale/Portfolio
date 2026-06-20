@@ -44,7 +44,7 @@
   height: 60vh;
   min-height: 500px;
   background: rgba(4, 16, 21, 0.4);
-  border: 1px solid rgba(0, 255, 95, 0.1);
+  border: 1px solid rgba(255, 64, 129, 0.1);
   border-radius: 30px;
   overflow: hidden;
   backdrop-filter: blur(10px);

@@ -1,7 +1,8 @@
 import vodafoneCert from "../assets/vodafone_cert.jpg";
 import dataVisCert from "../assets/data_vis_cert.jpg";
 import voisCert from "../assets/vois_cert.jpeg";
-import ibm from "../assets/ibm.png"
+import ibm from "../assets/ibm.png";
+import icearsCert from "../assets/icears_certificate.png";
 export const certificatesData = [
   {
     id: 1,
@@ -21,11 +22,11 @@ export const certificatesData = [
   },
   {
     id: 3,
-    title: "AI Project Certification",
-    provider: "VOIS",
-    date: "Jun 2024",
-    image: voisCert,
-    imageAlt: "VOIS Certificate"
+    title: "Paper Presentation: Keystroke Behaviour Analysis",
+    provider: "ICEARS 2026",
+    date: "Feb 2026",
+    image: icearsCert,
+    imageAlt: "ICEARS Presentation Certificate"
   },
   {
     id: 4,
