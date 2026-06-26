@@ -650,7 +650,7 @@ const Home = () => {
               <div className="edu-meta">
                 Vishwakarma Institute of Technology, Pune
               </div>
-              <p>2023 - 2027 · CGPA 8.74</p>
+              <p>2023 - 2027 · CGPA 8.78</p>
             </article>
             <article className="education-card">
               <div className="education-icon">📚</div>
