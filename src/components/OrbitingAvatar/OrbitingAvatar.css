@@ -1,3 +1,12 @@
+@keyframes floatAvatar {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 .orbiting-container {
   position: relative;
   width: 240px;
@@ -6,6 +15,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  animation: floatAvatar 6s ease-in-out infinite;
 }
 
 .avatar-wrapper {

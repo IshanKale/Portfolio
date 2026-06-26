@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import HeroParticles from "../components/HeroParticles/HeroParticles";
 import Terminal from "../components/Terminal/Terminal";
 import profileImage from "../assets/ishan_profile.jpg";
@@ -9,6 +10,8 @@ import SkillsPlayground from "../components/SkillsPlayground/SkillsPlayground";
 import OrbitingAvatar from "../components/OrbitingAvatar/OrbitingAvatar";
 import GithubCard from "../components/StatsCards/GithubCard";
 import LeetCodeCard from "../components/StatsCards/LeetCodeCard";
+import CodeForcesCard from "../components/StatsCards/CodeForcesCard";
+import CodeChefCard from "../components/StatsCards/CodeChefCard";
 import { certificatesData } from "../data/certificates";
 import resumeFile from "../assets/resume.pdf";
 const designationTexts = [
@@ -25,8 +28,171 @@ const skills = [
   "Express",
 ];
 
+const experiences = [
+  {
+    id: 1,
+    role: "Cyber Security Analyst",
+    subtitle: "(Virtual)",
+    company: "Deloitte Australia",
+    badge: "Internship / Simulation",
+    date: "Jul 2025",
+    desc: "Analysed web logs, investigated threats, and helped secure cloud-based services through practical cyber security workflows."
+  },
+  {
+    id: 2,
+    role: "Data Analytics Intern",
+    company: "Vodafone Idea Foundation",
+    badge: "AI & Data Analyst",
+    date: "Nov 2024",
+    desc: "Applied AI models to improve insights, run analytics pipelines, and build dashboards for stakeholder reporting."
+  },
+  {
+    id: 3,
+    role: "Student Researcher",
+    company: "VIT Pune",
+    badge: "Research",
+    date: "Mar 2026",
+    desc: "Published a paper on AI-driven data science systems and presented findings at a technical conference."
+  },
+  {
+    id: 4,
+    role: "Contributer",
+    company: "SSoC 26",
+    badge: "open source",
+    date: "Jun-Aug 2026",
+    desc: "contributing to open source projects and understanding real life projects"
+  }
+];
+
+const ExperienceCard = ({ id, role, subtitle, company, badge, date, desc, isLeft, isTimelineInView, index, isExpanded, onToggle }) => {
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mediaQuery.matches);
+    const handleMediaQueryChange = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+    return () => mediaQuery.removeEventListener("change", handleMediaQueryChange);
+  }, []);
+
+  const entryDelay = 0.6 + index * 0.5;
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: isMobile ? 30 : (isLeft ? -35 : 35) }}
+      animate={isTimelineInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ 
+        layout: { duration: 0.35, ease: "easeInOut" },
+        opacity: { duration: 0.8, ease: "easeOut", delay: isTimelineInView ? entryDelay : 0 },
+        x: { duration: 0.8, ease: "easeOut", delay: isTimelineInView ? entryDelay : 0 }
+      }}
+      className={`timeline-card ${isExpanded ? "expanded" : "collapsed"}`}
+      onClick={() => !isExpanded && onToggle()}
+      style={{ borderRadius: isExpanded ? "16px" : "30px" }}
+    >
+      {/* Capsule View: height and opacity animated smoothly inline */}
+      <motion.div
+        animate={{ 
+          opacity: isExpanded ? 0 : 1,
+          height: isExpanded ? 0 : "auto"
+        }}
+        transition={{ 
+          opacity: { duration: isExpanded ? 0.05 : 0.2, delay: isExpanded ? 0 : 0.25 },
+          height: { duration: 0.35, ease: "easeInOut" }
+        }}
+        style={{ overflow: "hidden", pointerEvents: isExpanded ? "none" : "auto" }}
+        className="capsule-view"
+      >
+        {(isLeft && !isMobile) && (
+          <span className="capsule-icon">
+            <svg
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              fill="none"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </span>
+        )}
+        <span className="capsule-date">{date}</span>
+        <span className="capsule-divider">|</span>
+        <span className="capsule-role">{role}</span>
+        {!(isLeft && !isMobile) && (
+          <span className="capsule-icon">
+            <svg
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              fill="none"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </span>
+        )}
+      </motion.div>
+
+      {/* Expanded View: height and opacity animated smoothly inline */}
+      <motion.div
+        animate={{ 
+          opacity: isExpanded ? 1 : 0,
+          height: isExpanded ? "auto" : 0
+        }}
+        transition={{ 
+          opacity: { duration: isExpanded ? 0.2 : 0.05, delay: isExpanded ? 0.3 : 0 },
+          height: { duration: 0.35, ease: "easeInOut" }
+        }}
+        style={{ overflow: "hidden", pointerEvents: isExpanded ? "auto" : "none" }}
+        className="expanded-view"
+      >
+        <button
+          className={`close-btn ${(isLeft && !isMobile) ? "left-side" : "right-side"}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle();
+          }}
+          aria-label="Close details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            fill="none"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <h3>
+          {role} {subtitle && <span>{subtitle}</span>}
+        </h3>
+        <h4>{company}</h4>
+        <div className="timeline-meta">
+          <span className="badge badge-year">{badge}</span>
+          <span>{date}</span>
+        </div>
+        <p>{desc}</p>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Home = () => {
   const [lightbox, setLightbox] = useState({ open: false, src: "", alt: "" });
+  const [expandedExpId, setExpandedExpId] = useState(null);
+  const timelineRef = useRef(null);
+  const isTimelineInView = useInView(timelineRef, { once: true, amount: 0.15 });
   const [typingText, setTypingText] = useState("");
   const [submitText, setSubmitText] = useState("Send message");
   const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -78,7 +244,7 @@ const Home = () => {
 
   useEffect(() => {
     const revealElements = document.querySelectorAll(
-      ".reveal, .reveal-left, .reveal-right",
+      ".reveal, .reveal-left, .reveal-right, .timeline-observer",
     );
     const observer = new IntersectionObserver(
       (entries, obs) => {
@@ -434,6 +600,8 @@ const Home = () => {
           <div className="about-cards-grid reveal">
             <GithubCard username="IshanKale" />
             <LeetCodeCard username="IshanKale" />
+            <CodeChefCard username="ishankale" />
+            <CodeForcesCard username="IshanKale" />
           </div>
         </div>
       </section>
@@ -446,71 +614,23 @@ const Home = () => {
               Professional roles and industry exposure
             </p>
           </div>
-          <div className="timeline">
-            <article className="timeline-item reveal-left">
-              <span className="timeline-dot" />
-              <div className="timeline-card">
-                <h3>
-                  Cyber Security Analyst <span>(Virtual)</span>
-                </h3>
-                <h4>Deloitte Australia</h4>
-                <div className="timeline-meta">
-                  <span className="badge badge-year">
-                    Internship / Simulation
-                  </span>
-                  <span>Jul 2025</span>
-                </div>
-                <p>
-                  Analysed web logs, investigated threats, and helped secure
-                  cloud-based services through practical cyber security
-                  workflows.
-                </p>
-              </div>
-            </article>
-            <article className="timeline-item reveal-right">
-              <span className="timeline-dot" />
-              <div className="timeline-card">
-                <h3>Data Analytics Intern</h3>
-                <h4>Vodafone Idea Foundation</h4>
-                <div className="timeline-meta">
-                  <span className="badge badge-year">AI & Data Analyst</span>
-                  <span>Nov 2024</span>
-                </div>
-                <p>
-                  Applied AI models to improve insights, run analytics
-                  pipelines, and build dashboards for stakeholder reporting.
-                </p>
-              </div>
-            </article>
-            <article className="timeline-item reveal-left">
-              <span className="timeline-dot" />
-              <div className="timeline-card">
-                <h3>Student Researcher</h3>
-                <h4>VIT Pune</h4>
-                <div className="timeline-meta">
-                  <span className="badge badge-year">Research</span>
-                  <span>Mar 2026</span>
-                </div>
-                <p>
-                  Published a paper on AI-driven data science systems and
-                  presented findings at a technical conference.
-                </p>
-              </div>
-            </article>
-            <article className="timeline-item reveal-left">
-              <span className="timeline-dot" />
-              <div className="timeline-card">
-                <h3>Contributer</h3>
-                <h4>SSoC 26</h4>
-                <div className="timeline-meta">
-                  <span className="badge badge-year">open  source</span>
-                  <span>Jun-Aug 2026</span>
-                </div>
-                <p>
-                  contributing to open source projects and understanding real life projects
-                </p>
-              </div>
-            </article>
+          <div ref={timelineRef} className={`timeline timeline-observer ${isTimelineInView ? "active" : ""}`}>
+            {experiences.map((exp, index) => {
+              const isLeft = index % 2 === 0;
+              return (
+                <article key={exp.id} className="timeline-item">
+                  <span className="timeline-dot" />
+                  <ExperienceCard
+                    {...exp}
+                    index={index}
+                    isLeft={isLeft}
+                    isTimelineInView={isTimelineInView}
+                    isExpanded={expandedExpId === exp.id}
+                    onToggle={() => setExpandedExpId(expandedExpId === exp.id ? null : exp.id)}
+                  />
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

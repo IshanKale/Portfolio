@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
 import { 
   SiCplusplus, SiJavascript, SiHtml5, SiPython, 
@@ -37,9 +37,26 @@ const SKILLS_DATA = [
 const SkillsPlayground = () => {
   const sceneRef = useRef(null);
   const engineRef = useRef(null);
-  const renderRef = useRef(null);
-  const runnerRef = useRef(null);
   const blockRefs = useRef({});
+  
+  // Detect mobile viewport size to scale down boxes and optimize physics
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mediaQuery.matches);
+
+    const handleMediaQueryChange = (e) => {
+      setIsMobile(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (!sceneRef.current) return;
@@ -51,6 +68,12 @@ const SkillsPlayground = () => {
     const world = engine.world;
     engineRef.current = engine;
 
+    // CPU Optimization for Mobile
+    if (isMobile) {
+      engine.positionIterations = 3; // Default is 6. Lowering it reduces collision calculations
+      engine.velocityIterations = 3; // Default is 4. Lowering it reduces velocity updates
+    }
+
     const wallOptions = { isStatic: true, render: { visible: false }, friction: 0.2 };
     const ground = Matter.Bodies.rectangle(width / 2, height + 100, width * 3, 200, wallOptions);
     const leftWall = Matter.Bodies.rectangle(-100, height / 2, 200, height * 3, wallOptions);
@@ -59,18 +82,20 @@ const SkillsPlayground = () => {
 
     Matter.World.add(world, [ground, leftWall, rightWall, ceiling]);
 
+    const boxSize = isMobile ? 60 : 100;
+    const chamferRadius = isMobile ? 12 : 20;
+
     const bodies = SKILLS_DATA.map((skill) => {
-      const boxSize = 100;
-      const safeWidth = Math.max(width, 400); 
+      const safeWidth = Math.max(width, boxSize * 3); 
       const x = (Math.random() * (safeWidth - boxSize * 2)) + boxSize;
       const y = -boxSize - (Math.random() * 300);
 
       const body = Matter.Bodies.rectangle(x, y, boxSize, boxSize, {
-        restitution: 0.6,
+        restitution: 0.5,
         friction: 0.1,
         density: 0.005,
         label: skill.id,
-        chamfer: { radius: 20 }
+        chamfer: { radius: chamferRadius }
       });
 
       Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.1);
@@ -91,7 +116,7 @@ const SkillsPlayground = () => {
 
     Matter.World.add(world, mouseConstraint);
 
-    // Custom animation loop is more reliable in React than Matter.Runner
+    // Custom animation loop
     let animationFrameId;
     let isVisible = true;
 
@@ -108,8 +133,9 @@ const SkillsPlayground = () => {
         const domElement = blockRefs.current[id];
         
         if (domElement) {
-          const x = body.position.x - 50; 
-          const y = body.position.y - 50;
+          const halfSize = boxSize / 2;
+          const x = body.position.x - halfSize; 
+          const y = body.position.y - halfSize;
           const angle = body.angle;
           domElement.style.transform = `translate(${x}px, ${y}px) rotate(${angle}rad)`;
         }
@@ -152,7 +178,7 @@ const SkillsPlayground = () => {
         Matter.Engine.clear(engineRef.current);
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <section className="skills-playground-section" id="skills">
@@ -167,20 +193,20 @@ const SkillsPlayground = () => {
         <div className="playground-area reveal" ref={sceneRef}>
           {SKILLS_DATA.map((skill) => (
             <div
-              key={skill.id}
+              key={`skill-${isMobile ? 'm' : 'd'}-${skill.id}`}
               id={`skill-block-${skill.id}`}
               ref={(el) => (blockRefs.current[skill.id] = el)}
-              className="skill-block"
+              className={isMobile ? "skill-block skill-block-mobile" : "skill-block"}
               style={{
-                width: '100px',
-                height: '100px',
+                width: isMobile ? '60px' : '100px',
+                height: isMobile ? '60px' : '100px',
                 backgroundColor: skill.bg,
                 color: skill.color,
                 border: skill.id === 'solana' || skill.id === 'nextjs' || skill.id === 'supabase' ? '1px solid rgba(255,255,255,0.15)' : 'none'
               }}
             >
               <div className="skill-icon">
-                <skill.Icon size={42} />
+                <skill.Icon size={isMobile ? 24 : 42} />
               </div>
               <span className="skill-name">{skill.label}</span>
             </div>

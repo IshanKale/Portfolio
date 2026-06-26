@@ -78,12 +78,29 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
   transition: box-shadow 0.2s ease, filter 0.2s ease;
   will-change: transform;
+  touch-action: none; /* Essential for mobile/touch dragging without scrolling the page */
 }
 
 .skill-block:active {
   cursor: grabbing;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3);
   filter: brightness(1.1);
+}
+
+/* Specific styling for optimized mobile physics bodies */
+.skill-block-mobile {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35); /* lighter shadow for better mobile composition performance */
+}
+
+.skill-block-mobile .skill-icon {
+  margin-bottom: 2px !important;
+}
+
+.skill-block-mobile .skill-name {
+  font-size: 0.65rem !important;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
 }
 
 .skill-icon {
@@ -108,3 +125,14 @@
   letter-spacing: 0.5px;
   text-align: center;
 }
+
+/* Scale down the container height on small screens */
+@media (max-width: 768px) {
+  .playground-area {
+    min-height: 400px;
+    height: 50vh;
+    border-radius: 20px;
+  }
+}
+
+

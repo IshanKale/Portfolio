@@ -1,0 +1,107 @@
+.codechef-card {
+  border-color: rgba(210, 105, 30, 0.2);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.codechef-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(210, 105, 30, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(210, 105, 30, 0.25);
+}
+
+.chef-stats-grid {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.chef-grade-container {
+  flex-shrink: 0;
+}
+
+.chef-grade-badge {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  transition: transform 0.3s;
+}
+
+.chef-grade-badge:hover {
+  transform: scale(1.03);
+}
+
+.chef-badge-label {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 2px;
+}
+
+.chef-badge-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.chef-stats-boxes {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.chef-stat-box {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px;
+  transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+.chef-stat-box:hover {
+  transform: translateY(-2px);
+  background: #222222;
+  border-color: #3a3a3a;
+}
+
+.chef-stat-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.chef-stat-name {
+  font-size: 0.6rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 4px;
+}
+
+.chef-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #2a2a2a;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.chef-footer-row strong {
+  font-weight: 700;
+}

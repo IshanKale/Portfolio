@@ -20,14 +20,14 @@ const MainLayout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
 
   return (
     <>
       <LoadingScreen />
       <Navbar />
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="wait">
         <motion.main
           key={location.pathname}
           initial="hidden"

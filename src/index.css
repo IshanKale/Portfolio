@@ -898,10 +898,21 @@ select {
 
 /* Gradient text utility */
 .gradient-text {
-  background: var(--gradient-accent);
+  background: linear-gradient(135deg, #ff4081, #6a1b9a, #00e5ff, #ff4081);
+  background-size: 300% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: textShine 6s linear infinite;
+}
+
+@keyframes textShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
 }
 
 /* Hero element visibility — staggered by JS */
@@ -1115,7 +1126,7 @@ select {
   background: var(--clr-accent);
   border-color: var(--clr-accent);
   color: var(--clr-bg-darker);
-  transform: translateY(-3px);
+  transform: translateY(-5px) scale(1.1) rotate(8deg);
   box-shadow: var(--shadow-glow-sm);
 }
 
@@ -2071,7 +2082,7 @@ section {
   padding: 20px 0;
 }
 
-/* Central vertical line */
+/* Central vertical line (scales downwards from the top when active) */
 .timeline::before {
   content: "";
   position: absolute;
@@ -2086,42 +2097,54 @@ section {
     var(--clr-accent),
     transparent
   );
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
+  transition: transform 2.0s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.timeline.active::before {
+  transform: translateX(-50%) scaleY(1);
 }
 
 .timeline-item {
   position: relative;
   width: 50%;
   padding: 0 40px 60px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Left-aligned items */
+/* Left-aligned items slide in from left, aligned right (towards central line) */
 .timeline-item:nth-child(odd) {
   left: 0;
   text-align: right;
   padding-right: 60px;
   padding-left: 0;
+  align-items: flex-end;
 }
 
-/* Right-aligned items */
+/* Right-aligned items slide in from right, aligned left (towards central line) */
 .timeline-item:nth-child(even) {
   left: 50%;
   text-align: left;
   padding-left: 60px;
   padding-right: 0;
+  align-items: flex-start;
 }
 
-/* Timeline dot */
+/* Timeline dot scales up */
 .timeline-dot {
   position: absolute;
-  top: 8px;
+  top: 14px; /* adjusted slightly to center vertically with capsule */
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background: var(--clr-accent);
   border: 3px solid var(--clr-bg-deep);
   z-index: 2;
-  animation: pulse 2.5s ease-in-out infinite;
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
 }
 
 .timeline-item:nth-child(odd) .timeline-dot {
@@ -2132,17 +2155,131 @@ section {
   left: -8px;
 }
 
+.timeline.active .timeline-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Staggered delay for timeline dots */
+.timeline.active .timeline-item:nth-child(1) .timeline-dot { transition-delay: 0.4s; }
+.timeline.active .timeline-item:nth-child(2) .timeline-dot { transition-delay: 0.9s; }
+.timeline.active .timeline-item:nth-child(3) .timeline-dot { transition-delay: 1.4s; }
+.timeline.active .timeline-item:nth-child(4) .timeline-dot { transition-delay: 1.9s; }
+
 /* Timeline card */
+/* Timeline card with premium Apple Glassmorphism */
 .timeline-card {
-  background: var(--gradient-card);
-  border: 1px solid var(--clr-glass-border);
-  border-radius: var(--border-radius);
-  padding: 28px;
-  transition: all var(--transition-fast);
+  background: rgba(17, 17, 24, 0.45);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
   isolation: isolate;
   --border-angle: 0deg;
+  min-height: 44px;
+  width: 100%;
+  border-radius: 30px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, padding 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Collapsed capsule styling */
+.timeline-card.collapsed {
+  padding: 10px 22px;
+  cursor: pointer;
+}
+
+/* Expanded state styling */
+.timeline-card.expanded {
+  padding: 28px;
+  border-radius: 16px;
+  cursor: default;
+}
+
+/* Capsule view children */
+.capsule-view {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.timeline-item:nth-child(odd) .capsule-view {
+  justify-content: flex-end;
+}
+
+.timeline-item:nth-child(even) .capsule-view {
+  justify-content: flex-start;
+}
+
+.capsule-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--clr-accent);
+  letter-spacing: 0.5px;
+}
+
+.capsule-divider {
+  color: var(--clr-glass-border);
+  font-weight: 300;
+  margin: 0 2px;
+}
+
+.capsule-role {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--clr-text);
+}
+
+.capsule-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--clr-accent);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  transition: transform var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.timeline-card.collapsed:hover .capsule-icon {
+  transform: rotate(90deg) scale(1.1);
+  background: var(--clr-accent);
+  color: #fff;
+}
+
+/* Close button style */
+.close-btn {
+  position: absolute;
+  top: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--clr-glass-border);
+  color: var(--clr-text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  z-index: 5;
+}
+
+.close-btn.right-side {
+  right: 18px;
+}
+
+.close-btn.left-side {
+  left: 18px;
+}
+
+.close-btn:hover {
+  background: rgba(255, 0, 128, 0.2);
+  color: #ff3366;
+  border-color: rgba(255, 0, 128, 0.4);
+  transform: rotate(90deg);
 }
 
 /* Glowing border animation */
@@ -2175,9 +2312,8 @@ section {
   z-index: 1;
 }
 
-.timeline-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-card-hover);
+.timeline-card.collapsed:hover {
+  box-shadow: 0 10px 40px rgba(0, 229, 255, 0.15);
   border-color: var(--clr-cyan-border);
   z-index: 1;
 }
@@ -4107,6 +4243,7 @@ section {
     text-align: left;
     padding-left: 54px;
     padding-right: 0;
+    align-items: flex-start;
   }
 
   .timeline-dot,
@@ -4117,6 +4254,11 @@ section {
   }
 
   .timeline-item:nth-child(odd) .timeline-meta {
+    justify-content: flex-start;
+  }
+
+  .timeline-item:nth-child(odd) .capsule-view,
+  .timeline-item:nth-child(even) .capsule-view {
     justify-content: flex-start;
   }
 
@@ -4597,4 +4739,92 @@ select:focus-visible {
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ============================================================
+   SKELETON SHIMMER CARD LOADERS
+   ============================================================ */
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 480px;
+}
+
+.skeleton-element {
+  background: #1c1c1c;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.skeleton-element::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.08) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.8s infinite;
+  content: '';
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-image {
+  height: 160px;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.skeleton-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.skeleton-line.w-40 { width: 40%; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-80 { width: 80%; }
+.skeleton-line.w-90 { width: 90%; }
+
+.skeleton-footer {
+  height: 20px;
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ============================================================
+   PERFORMANCE TUNING (MOBILE PERFORMANCE AND TEMPERATURE FIXES)
+   ============================================================ */
+@media (max-width: 768px) {
+  .hero-particles,
+  #particles-container {
+    display: none !important;
+  }
 }

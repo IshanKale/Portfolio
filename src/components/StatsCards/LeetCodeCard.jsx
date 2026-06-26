@@ -59,7 +59,20 @@ const LeetCodeCard = ({ username }) => {
   }, [username]);
 
   if (data.loading) {
-    return <div className="stats-card leetcode-card skeleton-loading">Loading...</div>;
+    return (
+      <div className="stats-card skeleton-card">
+        <div className="skeleton-element skeleton-image"></div>
+        <div className="skeleton-group">
+          <div className="skeleton-element skeleton-line w-40"></div>
+          <div className="skeleton-element skeleton-line w-90"></div>
+        </div>
+        <div className="skeleton-group">
+          <div className="skeleton-element skeleton-line w-60"></div>
+          <div className="skeleton-element skeleton-line w-80"></div>
+        </div>
+        <div className="skeleton-element skeleton-footer"></div>
+      </div>
+    );
   }
 
   const ringDasharray = 251.2; // 2 * PI * r (r=40)
